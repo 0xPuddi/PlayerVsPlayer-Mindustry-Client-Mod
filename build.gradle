@@ -17,7 +17,7 @@ java{
 
 ext{
     //the build number that this mod is made for
-    mindustryVersion = 'v145'
+    mindustryVersion = 'v146'
     jabelVersion = "93fde537c7"
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 }
@@ -32,6 +32,9 @@ allprojects{
 dependencies{
     compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
     compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
+    implementation "org.web3j:core:4.9.8"
+    implementation "com.google.zxing:core:3.5.2"
+    implementation "io.github.cdimascio:dotenv-java:3.0.0"
 
     annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
 }
@@ -42,7 +45,7 @@ configurations.all{
         if(details.requested.group == 'com.github.Anuken.Arc'){
             details.useVersion "$mindustryVersion"
         }
-    }
+    }    
 }
 
 task jarAndroid{
@@ -78,6 +81,9 @@ jar{
     from("assets/"){
         include "**"
     }
+
+    exclude("META-INF/*.RSA", "META-INF/*.DSA", "META-INF/*.SF")
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
 
 task deploy(type: Jar){
